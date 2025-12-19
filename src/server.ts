@@ -10,34 +10,35 @@ app.use(express.json())
 
 
 ///////////
-app.get("/events", (req, res) => {
-     if (req.query.category) {
-     const category = req.query.category as string;
-    const filteredEvents = getEventByCategory(category);
-     res.json(filteredEvents);
-    } else {
+app.get("/events/:id", async (req, res) => {
+   const id = parseInt(req.params.id);
+   const event = await getEventById(id);
+   if (event) {
+       res.json(event);
+   } else {
+       res.status(404).send("Event not found");
+   }
+});
 
-    res.json(getAllEvents());
-     }
- });
+
+app.get("/events", async (req, res) => {
+   if (req.query.category) {
+       const category = req.query.category as string;
+       const filteredEvents = await getEventByCategory(category);
+       res.json(filteredEvents);
+   } else {
+       res.json(await getAllEvents());
+   }
+});
 
 
-app.get("/events/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-    const event = getEventById(id);
-     if (event) {
-     res.json(event);
-     } else {
-    res.status(404);
-     }
-    });
-    
-    
-app.post("/events", (req, res) => {       
-     const newEvent: Event = req.body;    
-    addEvent(newEvent);
-     res.json(newEvent);
- });
+app.post("/events", async (req, res) => {
+   const newEvent: Event = req.body;
+
+
+   res.json(await addEvent(newEvent));
+});
+
 
 
 
