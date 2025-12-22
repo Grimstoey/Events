@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express'
 import { getAllEvents, getEventByCategory, getEventById, addEvent } from "./services/EventService";
-import type  Event from "./models/Event";
+import type { eventModel as Event } from "./generated/prisma/models/event";
 
 
 const app = express()

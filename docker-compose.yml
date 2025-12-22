@@ -9,14 +9,16 @@ services:
      POSTGRES_DB: mydatabase
    ports:
      - "5432:5432"
+
+# ตรงนี้คือการทำข้อมูลสำรอง ถ้าลบ container สามารถนำสิ่งที่ config ต่างๆตรงนี้ไปใช้ได้เหมือนเดิม
 #   volumes:
 #     - postgres_data:/var/lib/postgresql/data
    networks:
-     - postgres_network
+     - postgres_network 
 
 
  adminer:
-   image: adminer:latest
+   image: adminer:latest 
    container_name: adminer
    restart: always
    ports:

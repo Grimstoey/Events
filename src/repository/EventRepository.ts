@@ -1,4 +1,4 @@
-import type Event from "../models/Event";
+import type {eventModel as Event} from "../generated/prisma/models/event";
 
 const events: Event[] = [
   {

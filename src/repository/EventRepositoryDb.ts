@@ -1,5 +1,5 @@
 import type Event from "../models/Event";
-import { query } from "../db"; // สมมติว่า export query มาจากไฟล์ db
+import { query } from "../db"; 
 
 export async function getEventByCategory(category: string): Promise<Event[]> {
   const result = await query(
