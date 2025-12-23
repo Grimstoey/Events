@@ -13,6 +13,7 @@ app.use(express.json())
 app.get("/events/:id", async (req, res) => {
    const id = parseInt(req.params.id);
    const event = await getEventById(id);
+
    if (event) {
        res.json(event);
    } else {
