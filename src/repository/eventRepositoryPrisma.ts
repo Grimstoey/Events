@@ -21,11 +21,10 @@ export function getEventById(id: number) {
         select: {
           id: true,
         },
-      }
+      },
     },
   });
 }
-
 
 export function addEvent(newEvent: Event) {
   return prisma.event.create({
@@ -53,6 +52,14 @@ export function getAllEventsWithOrganizer() {
       organizer: {
         select: {
           name: true,
+        },
+      },
+      participants: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          events: true,
         },
       },
     },
