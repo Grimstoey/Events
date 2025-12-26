@@ -67,5 +67,24 @@ export function getAllEventsWithOrganizer() {
 }
 
 
-
+export function getAllEventsWithOrganizerPagination(
+  pageSize: number,
+  pageNo: number
+) {
+  return prisma.event.findMany({
+    skip: pageSize * (pageNo - 1),
+    take: pageSize,
+    select: {
+      id: true,
+      category: true,
+      title: true,
+      organizerId: false,
+      organizer: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+}
 
