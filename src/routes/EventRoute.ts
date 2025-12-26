@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express";
 import * as service from "../services/EventService";
 import type { eventModel as Event } from "../generated/prisma/models/event";
-import {Prisma} from "../generated/prisma/client";
-
+import { Prisma } from "../generated/prisma/client";
 
 import exp from "constants";
 
@@ -39,11 +38,19 @@ router.get("/", async (req, res) => {
     const pageNo = parseInt(req.query.pageNo as string) || 1;
 
     const keyword = req.query.keyword as string;
-    const result = await service.getAllEventsWithPagination(keyword,pageSize, pageNo);
+    const result = await service.getAllEventsWithPagination(
+      keyword,
+      pageSize,
+      pageNo
+    );
+
+    if (result.events.length === 0) {
+      res.status(404).send("No event found");
+      return;
+    }
 
     res.setHeader("x-total-count", result.count.toString());
     res.json(result.events);
-
   } else if (req.query.category) {
     const category = req.query.category;
   }
