@@ -66,7 +66,6 @@ export function getAllEventsWithOrganizer() {
   });
 }
 
-
 export function getAllEventsWithOrganizerPagination(
   pageSize: number,
   pageNo: number
@@ -88,3 +87,7 @@ export function getAllEventsWithOrganizerPagination(
   });
 }
 
+//นับจำนวนของข้อมูลทั้งหมดในฐานข้อมูล
+export function countEvent() {
+  return prisma.event.count();
+}
