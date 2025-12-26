@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
 import type Event from "../models/Event";
+import { Prisma } from "../generated/prisma/client";
 
 export function getEventByCategory(category: string) {
   return prisma.event.findMany({
@@ -66,17 +67,24 @@ export function getAllEventsWithOrganizer() {
   });
 }
 
-export function getAllEventsWithOrganizerPagination(
+export async function getAllEventsWithOrganizerPagination(
+  keyword: string,
   pageSize: number,
   pageNo: number
 ) {
-  return prisma.event.findMany({
+  const where = {
+    title: { contains: keyword },
+    mode: "insensitive",
+  };
+
+  const events = await prisma.event.findMany({
+    where,
     skip: pageSize * (pageNo - 1),
     take: pageSize,
     select: {
       id: true,
-      category: true,
       title: true,
+      category: true,
       organizerId: false,
       organizer: {
         select: {
@@ -85,6 +93,10 @@ export function getAllEventsWithOrganizerPagination(
       },
     },
   });
+
+  const count = await prisma.event.count({ where });
+
+  return { count, events } as unknown as PageEvent;
 }
 
 //นับจำนวนของข้อมูลทั้งหมดในฐานข้อมูล

@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import * as service from "../services/EventService";
 import type { eventModel as Event } from "../generated/prisma/models/event";
+import {Prisma} from "../generated/prisma/client";
+
 
 import exp from "constants";
 
@@ -18,15 +20,29 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  //   if (req.query.pageSize && req.query.pageNo) {
+  //     const pageSize = parseInt(req.query.pageSize as string);
+  //     const pageNo = parseInt(req.query.pageNo as string);
+
+  //     const events = await service.getAllEventsWithPagination(pageSize, pageNo);
+  //     const totalEvents = await service.count();
+
+  //     res.setHeader("x-total-count", totalEvents.toString()); //ส่งข้อมูลผ่านทาง header
+  //     res.json(events);
+
+  //   } else if (req.query.category) {
+  //     const category = req.query.category;
+  //   }
+
   if (req.query.pageSize && req.query.pageNo) {
-    const pageSize = parseInt(req.query.pageSize as string);
-    const pageNo = parseInt(req.query.pageNo as string);
-    
-    const events = await service.getAllEventsWithPagination(pageSize, pageNo);
-    const totalEvents = await service.count();
-    //res.json({ totalEvents, events });
-    res.setHeader("x-total-count", totalEvents.toString()); //ส่งข้อมูลผ่านทาง header
-    res.json(events);
+    const pageSize = parseInt(req.query.pageSize as string) || 3;
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+
+    const keyword = req.query.keyword as string;
+    const result = await service.getAllEventsWithPagination(keyword,pageSize, pageNo);
+
+    res.setHeader("x-total-count", result.count.toString());
+    res.json(result.events);
 
   } else if (req.query.category) {
     const category = req.query.category;
